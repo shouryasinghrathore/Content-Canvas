@@ -29,6 +29,7 @@ app.listen(process.env.PORT, () => {
 app.use("/api/v1",blogs);
 
 app.get("/", (req, res) => {
-    res.send("<h1>This is home page</h1>")
+    res.json({
+        message:"Welcome to Content Canvas "
+    })
 })
-
