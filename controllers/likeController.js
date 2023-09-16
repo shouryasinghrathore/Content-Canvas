@@ -3,14 +3,15 @@ const Like = require("../models/likeModel");
 
 exports.likepost = async (req, res) => {
     try {
-        const { post, user } = req.body;
+        const { post } = req.body;
+        const userid = req.user.id;
         const like = new Like({
-            post, user,
+            post, user: userid,
         });
 
         const savedLike = await like.save();
         const updatedPost = await Post.findByIdAndUpdate(post, { $push: { likes: savedLike._id } },
-             { new: true })
+            { new: true })
             .populate("likes")
             .exec();
         res.json({
@@ -34,13 +35,21 @@ exports.likepost = async (req, res) => {
 exports.unlikepost = async (req, res) => {
     try {
         const { post, like } = req.body;
-      
-       const deletedLike = await Like.findOneAndDelete({post:post, _id:like})
-       
-       
-       const updatedPost = await Post.findByIdAndUpdate(post,{$pull:{likes :  deletedLike._id}},{new : true})
-       res.json({
-            post:updatedPost,
+        const userid = req.user.id;
+        const lx = await Like.findById(like);
+        if (userid != lx.user)
+        {
+            return res.status(403).json({
+                success: false,
+                message: "You are not Authorised"
+            })
+        }
+            const deletedLike = await Like.findOneAndDelete({ post: post, _id: like })
+
+
+        const updatedPost = await Post.findByIdAndUpdate(post, { $pull: { likes: deletedLike._id } }, { new: true })
+        res.json({
+            post: updatedPost,
         })
     }
     catch (err) {

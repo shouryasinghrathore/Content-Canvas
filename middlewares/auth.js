@@ -4,7 +4,6 @@ require("dotenv").config();
 exports.auth = async (req, res, next) => {
     try {
         const token = req.cookies.token|| req.body.token ;
-        console.log("token=>", token);
         if (!token || token === undefined) {
             return res.status(401).json({
                 success: false,
@@ -15,7 +14,7 @@ exports.auth = async (req, res, next) => {
 
         try {
             const payload = jwt.verify(token, process.env.JWTS);
-            console.log(payload);
+            // console.log(payload);
             req.user = payload;
         }
         catch (err) {
