@@ -76,10 +76,10 @@ exports.deletePost = async (req, res) => {
         const postId = req.body.post;
         const postdetails = await Post.findById(postId);
         const id = req.user.id;
-        console.log("id", id);
-        console.log("postdetails.Creater", postdetails.Creater);
+        // console.log("id", id);
+        // console.log("postdetails.Creater", postdetails.Creater);
 
-        if (id != postdetails.Creater) {
+        if (id !== postdetails.Creater.toString()) {
             return res.status(403).json({
                 success: false,
                 message: "You are not Authorised to delete this post"

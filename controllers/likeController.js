@@ -36,8 +36,10 @@ exports.unlikepost = async (req, res) => {
     try {
         const { post, like } = req.body;
         const userid = req.user.id;
-        const lx = await Like.findById(like);
-        if (userid != lx.user)
+        const likeid = await Like.findById(like);
+        // console.log("likeid",likeid)
+        // console.log("userid",userid)
+        if (userid !== likeid.user.toString())
         {
             return res.status(403).json({
                 success: false,

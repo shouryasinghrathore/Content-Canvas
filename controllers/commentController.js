@@ -1,8 +1,7 @@
 
 const Post = require("../models/postModel");
 const Comment = require("../models/commentModel");
-
-
+const mongoose = require("mongoose");
 
 exports.createComment = async (req, res) => {
     try {
@@ -44,8 +43,8 @@ exports.deleteComment = async (req, res) => {
         const userid = req.user.id;
         const commentDetails = await Comment.findById(comment)
         // console.log("userid =>",userid);
-        // console.log("commentDetails =>",commentDetails);
-        if (userid != commentDetails.user) {
+        // console.log("commentDetails.user =>",commentDetails.user.toString());
+        if (userid !== commentDetails.user.toString()) {
             return res.status(403).json({
                 success: false,
                 message: "You are not Authorised to delete this comment"
